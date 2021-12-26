@@ -295,7 +295,7 @@ NEXT STEP IS HANDLING THE STATIC FILES (IMAGES/CSS/JS FILES)
 
 ----------------------------------------*****-----------------------------------------------------------------------------------------
 
-
+SY8RJ2UbHkg2KNf
 
 
 
@@ -306,6 +306,36 @@ STATIC FILE SERVING
 
 
 
+
+
+server {
+
+        listen 80;
+        server_name ec2-54-221-42-4.compute-1.amazonaws.com;
+
+        location / {
+                include proxy_params;
+                proxy_pass http://unix:/home/ubuntu/LPMF/app.sock;
+        }
+        location /static/ {
+                autoindex on;
+                alias /home/ubuntu/LPMF/static/;
+        }
+
+}
+
+ have to make changes to this file in /etc/nginx/sitesavailable-enabled/django.conf
+
+add static folder path
+
+and again
+
+(env) ubuntu@ip-172-31-94-9:/etc/nginx/sites-enabled$ sudo service nginx restart
+(env) ubuntu@ip-172-31-94-9:/etc/nginx/sites-enabled$ sudo nano django.conf
+
+and Done check now
+
+--------------------------------------------------------------------------------------------------------------------
 
 
 
