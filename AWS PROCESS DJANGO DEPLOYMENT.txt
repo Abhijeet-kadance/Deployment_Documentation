@@ -1,0 +1,319 @@
+$ git clone https://github.com/Abhijeet-kadance/AWS_Local.git
+Cloning into 'AWS_Local'...
+warning: You appear to have cloned an empty repository.
+
+--------------------------------------------------------------------------------------
+$ code .
+
+--------------------------------------------------------------------------------------
+$ ls
+LPMF/  localization.pem
+
+--------------------------------------------------------------------------------------
+
+$ chmod 400 localization.pem
+
+--------------------------------------------------------------------------------------
+
+$ ls -l
+total 8
+drwxr-xr-x 1 Lenovo 197121    0 Dec 26 20:16 LPMF/
+-r--r--r-- 1 Lenovo 197121 1704 Dec 26 20:14 localization.pem
+
+--------------------------------------------------------------------------------------
+
+$  ssh -i "localization.pem" ubuntu@ec2-54-221-42-4.compute-1.amazonaws.com
+
+The authenticity of host 'ec2-54-221-42-4.compute-1.amazonaws.com (54.221.42.4)' can't be established.
+ED25519 key fingerprint is SHA256:AsNdH24ruj6jEHBTzAV0OgjxsFvLCQAKaqfHGBP6puI.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? y
+Please type 'yes', 'no' or the fingerprint: yes
+Warning: Permanently added 'ec2-54-221-42-4.compute-1.amazonaws.com' (ED25519) to the list of known hosts.
+Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.11.0-1022-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sun Dec 26 15:59:49 UTC 2021
+
+  System load:  0.08              Processes:             99
+  Usage of /:   18.4% of 7.69GB   Users logged in:       0
+  Memory usage: 21%               IPv4 address for eth0: 172.31.94.9
+  Swap usage:   0%
+
+1 update can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+ubuntu@ip-172-31-94-9:~$ ls
+---------------------------------------------------------------------------------------------
+
+ubuntu@ip-172-31-94-9:~$ sudo apt-get update
+
+--------------------------------------------------------------------------------------------------
+
+ubuntu@ip-172-31-94-9:~$ sudo apt-get upgrade -y
+
+---------------------------------------------------------------------------------------------
+
+ubuntu@ip-172-31-94-9:~$ python3 --version
+Python 3.8.10
+ubuntu@ip-172-31-94-9:~$ python3 -m venv env
+The virtual environment was not created successfully because ensurepip is not
+available.  On Debian/Ubuntu systems, you need to install the python3-venv
+package using the following command.
+
+    apt install python3.8-venv
+
+You may need to use sudo with that command.  After installing the python3-venv
+package, recreate your virtual environment.
+
+Failing command: ['/home/ubuntu/env/bin/python3', '-Im', 'ensurepip', '--upgrade', '--default-pip']
+
+ubuntu@ip-172-31-94-9:~$ sudo apt install python3.8-venv
+
+--------------------------------------------------------------------------------------------------
+
+ubuntu@ip-172-31-94-9:~$ python3 -m venv env
+ubuntu@ip-172-31-94-9:~$ ls
+env
+
+-----------------------------------------------------------------------------------------------------
+
+
+
+GO TO THE FOLDER WHERE YOUR DJANGO CODE IS AVAILABLE AND ZIP THE COMPLETE FOLDER
+
+NOW OPEN GIT BASH/CMNDER IN THAT FOLDER AND TYPE THE FOLLOWING COMMAND
+
+$ scp -i localization.pem LPMF.zip ubuntu@ec2-54-221-42-4.compute-1.amazonaws.com:~/
+
+LPMF.zip                                      100%   53MB 582.7KB/s   01:33
+
+THIS COMMAND WILL COPY SECURLY THE ZIP FOLDER IN YOUR AWS UBUNTU INSTANCE
+
+NOW LOGIN TO THE AWS INSTANCE AGAIN AND DO LS COMMAND TO CHECK THE FILE IS COPIED
+
+-------------------------------- 
+
+START YOUR VIRTUAL ENVIORNMENT
+
+source /env/bin/activate
+
+---------------------------------------------------------------------------------------------------
+
+(env) ubuntu@ip-172-31-94-9:~$ pip3 install django
+
+(env) ubuntu@ip-172-31-94-9:~$ pip install pillow
+
+------------------------------------------------------------------------------------------------------
+
+
+(env) ubuntu@ip-172-31-94-9:~$ ls
+LPMF.zip  env
+
+
+YOU CAN SEE THE ZIP FILE IS COPIED
+
+------------------------------------------------------------------------------------------------------
+
+
+(env) ubuntu@ip-172-31-94-9:~$ sudo apt install unzip
+
+
+-------------------------------------------------------------------------------------------------------
+
+(env) ubuntu@ip-172-31-94-9:~$ unzip LPMF.zip
+Archive:  LPMF.zip
+
+
+----------------------------------------------------------------------------------------------------------
+
+(env) ubuntu@ip-172-31-94-9:~$ ls
+LPMF  LPMF.zip  env
+
+----------------------------------------------------------------------------------------------------------
+
+(env) ubuntu@ip-172-31-94-9:~/LPMF$ pip3 install gunicorn
+
+
+---------------------------------------------------------------------------------------------------------
+
+(env) ubuntu@ip-172-31-94-9:~/LPMF$ sudo apt-get install -y nginx
+
+
+-----------------------------------------------------------------------------------------------
+
+
+
+NEXT GO TO AWS INSTANCE PANEL ONLINE 
+
+GO TO SECUROTY GROUPS in Network & Security
+
+There select latest security group (check using date command on CLI to check which is the latest one)
+
+there add new rule
+
+choose http and use from anywhere 
+
+------------------------------------------------------------------------------------------------------
+
+
+Now check instance on browser an d you can see WLCOME TO NGINX PAGE 
+
+
+--------------------------------------------------------------------------------------------------------
+
+(env) ubuntu@ip-172-31-94-9:~/LPMF/LPMF$ gunicorn --bind 0.0.0.0:8000 LPMF.wsgi:application
+
+
+THIS COMMAND WILL BIND PROJECT TO GUNICORN
+
+GO TO USRL AND ADD :8000 to URL and check 
+
+but it wont wokr we have to add rule to securoty gorup
+
+
+Add custom rule and 0.0.0.0:0 
+
+And check done now it will work But still we have to keep it running in backround and setup static files handling
+
+--------------------------------------------------------------------------------------------------------
+
+(env) ubuntu@ip-172-31-94-9:~/LPMF$ sudo apt-get install -y supervisor
+
+SUPERVISOR KEEP THE APP RUNNING IN BACKGROUND
+
+-------------------------------------------------------------------------------------------------
+
+(env) ubuntu@ip-172-31-94-9:~/LPMF$ cd /etc/supervisor/
+(env) ubuntu@ip-172-31-94-9:/etc/supervisor$ cd conf.d/
+(env) ubuntu@ip-172-31-94-9:/etc/supervisor/conf.d$ ls
+
+THIS WILL BE THE SUPERVISOR FOLDER AND WE HAVE TO KEEP LOG OF NGINX SERVER ERRORS AND OUTPUT DO WE HAVE MANUALLY CREATE THE FOLLWING
+
+-------------------------------------------------------------------------------------------------------
+
+
+(env) ubuntu@ip-172-31-94-9:/etc/supervisor/conf.d$ nano gunicorn.conf
+
+
+(env) ubuntu@ip-172-31-94-9:/etc/supervisor/conf.d$ sudo nano gunicorn.conf
+
+
+[program:gunicorn]
+directory=/home/ubuntu/LPMF
+command=/home/ubuntu/env/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/LPMF/app.sock LPMF.wsgi:application
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/gunicorn/gunicorn.err.log
+stdout_logfile=/var/log/gunicorn/gunicorn.out.log
+
+[group:guni]
+programs:gunicorn
+
+
+------------------------------------------------------------------------------------------------------
+
+(env) ubuntu@ip-172-31-94-9:/etc/supervisor/conf.d$ sudo supervisorctl reread
+ERROR: CANT_REREAD: The directory named as part of the path /var/log/gunicorn/gunicorn.out.log does not exist in section 'program:gunicorn' (file: '/etc/supervisor/conf.d/gunicorn.conf')
+(env) ubuntu@ip-172-31-94-9:/etc/supervisor/conf.d$ sudo mkdir /var/log/gunicorn
+(env) ubuntu@ip-172-31-94-9:/etc/supervisor/conf.d$ sudo supervisorctl reread
+guni: available
+(env) ubuntu@ip-172-31-94-9:/etc/supervisor/conf.d$ sudo supervisorctl update
+guni: added process group
+(env) ubuntu@ip-172-31-94-9:/etc/supervisor/conf.d$ sudo supervisorctl status
+guni:gunicorn                    RUNNING   pid 20258, uptime 0:00:08
+
+
+---------------------------------------------------------------------------------------------------------------
+
+
+
+(env) ubuntu@ip-172-31-94-9:~$ cd /etc/nginx/sites-available/
+
+(env) ubuntu@ip-172-31-94-9:/etc/nginx/sites-available$ sudo touch django.conf
+(env) ubuntu@ip-172-31-94-9:/etc/nginx/sites-available$ sudo nano d
+default      django.conf
+(env) ubuntu@ip-172-31-94-9:/etc/nginx/sites-available$ sudo nano django.conf
+(env) ubuntu@ip-172-31-94-9:/etc/nginx/sites-available$ cat django.conf
+
+
+server {
+
+        listen 80;
+        server_name ec2-54-221-42-4.compute-1.amazonaws.com;
+
+        location / {
+                include proxy_params;
+                proxy_pass http://unix:/home/ubuntu/LPMF/app.sock;
+        }
+}
+
+
+------------------------------------------------------------------------------------------------------
+
+
+(env) ubuntu@ip-172-31-94-9:/etc/nginx/sites-available$ sudo nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+----------------------------------------------------------------------------------------------------
+
+
+(env) ubuntu@ip-172-31-94-9:/etc/nginx/sites-available$ sudo ln django.conf /etc/nginx/sites-enabled/
+(env) ubuntu@ip-172-31-94-9:/etc/nginx/sites-available$ sudo nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+(env) ubuntu@ip-172-31-94-9:/etc/nginx/sites-available$ sudo service nginx restart
+
+
+-------------------------------------------------------------------------------------------------------
+
+Check your url without mntioning the port 8000
+
+you can see now that it is showing us our django app
+
+
+NEXT STEP IS HANDLING THE STATIC FILES (IMAGES/CSS/JS FILES)
+
+----------------------------------------*****-----------------------------------------------------------------------------------------
+
+
+
+
+
+STATIC FILE SERVING 
+
+
+---------------------------------------------------------------------------***********------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
