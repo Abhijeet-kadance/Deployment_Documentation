@@ -1,0 +1,198 @@
+---This is a step by step guide to setup Webpack for n django App
+
+
+First git clone the repository and create virtual env using command
+
+$ python -m venv venv
+
+OR
+
+$ virtualenv venv
+
+After that activate it with the follwing command
+
+$ source venv/Scripts/activate
+
+OR
+
+Go to the Scripts folder manually and source activate 
+
+If in windows call activate.bat file
+
+-------------------------------------------------------------------------------
+
+You have activated the virtual env successfully 
+
+------------------------------------------------------------------------------------------------------
+
+Create a package.json file using the following command
+
+
+
+$ npm init -y
+Wrote to E:\Demos\Djando_with_webpack\package.json:
+
+{
+  "name": "Djando_with_webpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"   
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+
+
+--------------------------------------------------------------------------------------------------------
+
+
+Install Webpack and Webpack CLI 
+
+------------------------------------------------------------------------------------------------------
+
+$ npm i webpack webpack-cli
+
+
+------------------------------------------------------------------------------------------------------------
+
+
+Go to setting.py file and make the following changes
+
+1. add app to apps json
+
+---------------------
+
+create a new file with name webpack.config.js
+
+
+module.exports = {
+    mode:'development',
+    entry: '/app/static/js/index.js',
+    output: {
+        publicPath: 'http://127.0.0.1:8080/'
+      },
+      devServer: {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        }
+      }
+}
+
+Here we have to mention mode : 'development' and entrypoint as /app/static/js/index.js file
+
+
+---------------------------------------------------------
+
+
+in the package.json file inside "scripts: key value add the following
+
+"build":"webpack",
+
+This is very important so that we can call webpack when hiting the command "npm build"
+
+and enter the following command 
+$ npm run build
+
+after this webpack will generate a configuration
+**
+
+*** dist folder will be created and configuration would be added to package.json ***
+
+------------------------------------------------------------------------------------------------------
+
+
+We have to mention this dist folder in setting.py folder 
+
+
+STATICFILES_DIRS = ['dist']
+
+Add the line to settings.py file
+
+-------------------------------------------------------------------------------------------------------
+
+
+$ npm run build
+
+and done 
+
+--------------------------------------------------------------------------------------------------------
+
+
+$ python manage.py runserver 
+
+and you can see the app with index.js file fetching from main.js file of webpack
+
+-----------------------------------------------------------------------------------------------
+
+
+
+WEBPACK-DEV-SERVER
+
+
+
+
+
+---------------------------------------------------------------------------------------------------
+
+
+
+In order to reflect the changes to any js file directly to the web app we have to make use of webpack-dev-server
+
+
+we would be needing nodemon for this to watch changes to the server 
+
+
+1 . Start By installing webpack-dev-server using 
+	
+	$ npm i -D webpack-dev-server
+	
+	$ python manage.py runserver
+
+	but it wont do anything for it to work add a configuration to package.json file
+
+	inside "scripts"
+
+	add "start":"webpack-dev-server"
+
+2. Now use the command 
+
+	$ npm start this will start the dev-server
+
+	go to localhost:8080 / 127.0.0.1:8080
+
+	and add the following mapping to it 
+
+	localhost:8080/webpack-dev-server / 127.0.0.1:8080/webpack-dev-server
+
+	you will se main.js file click and you'll be directed to 
+
+	localhost:8080/main.js | 127.0.0.1:8080/main.js
+
+	You can now hit : $ npm start 
+
+3. Now we must install nodemon
+
+	Nodemon will help us to reflect changes and refresh after any changes on the webapp in realtime .
+
+	$ npm install -D nodemon
+
+	**** IMPORTANT POINT TO REMEMBER ****
+
+	change the "scirpt" : {
+				"start":"webpack-dev-server"
+		}
+
+	TO
+	
+	"scripts" : {
+			"start":"nodemon -w webpack.config.js -x webpack-dev-server"
+	}
+
+This will reflect live changes to server
+
+---------------------------------------------------------------------------------------------------------------
+	
+  
