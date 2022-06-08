@@ -60,3 +60,14 @@
      See "man sudo_root" for details.
 
      ubuntu@ip-172-**-**-*:~$ ls
+
+### Lets do some Basic Ubuntu Changes to get our Instacne ready for working ###
+
+     ubuntu@ip-172-31-94-9:~$ sudo apt-get update
+
+     // Lets upgrade our system
+
+     ubuntu@ip-172-31-94-9:~$ sudo apt-get upgrade -y
+
+---
+
