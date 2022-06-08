@@ -65,9 +65,17 @@
 
      ubuntu@ip-172-31-94-9:~$ sudo apt-get update
 
-     // Lets upgrade our system
+     // Lets upgrade our ubuntu system repository
 
      ubuntu@ip-172-31-94-9:~$ sudo apt-get upgrade -y
+
+---
+
+### Checking Python Version and Installing Virtual envionment ###
+
+     ubuntu@ip-172-31-94-9:~$ python3 --version
+
+     Python 3.8.10
 
 ---
 
