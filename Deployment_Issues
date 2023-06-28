@@ -1,0 +1,5 @@
+## Hosting on nginx on centos SELinux Issue (Permission Denied 13)
+
+https://stackoverflow.com/questions/48799746/nginx-permission-denied-to-gunicorn-socket-on-centos-7
+
+sudo semanage permissive -a httpd_t
