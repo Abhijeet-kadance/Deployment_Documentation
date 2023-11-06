@@ -1,0 +1,6 @@
+## MYSQL COMMAND LIST FOR DEVELOPMENT AND DEPLOYMENT 
+
+
+***To Export DB from mysql server***
+
+    >$  mysqldump -h localhost -u root -p --no-data test_db > exported_db_filename.sql
